@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JetX Multi-Platform Live Signal Engine</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-platform="stake">
+<div id="alert-banner" class="alert-banner hidden">
+  <span id="alert-banner-icon">⚠️</span>
+  <span id="alert-banner-text">CONNECTION LOST</span>
+  <button id="banner-action">Refresh Session</button>
+</div>
+
+<header class="topbar">
+  <div class="brand">
+    <div id="brand-mark">S</div>
+    <div>
+      <h1>JetX <span>Live Signal Engine</span></h1>
+      <p id="brand-sub">Source: Stake • ssgportal.com feed</p>
+    </div>
+  </div>
+  <div class="conn-pill" id="conn-pill">
+    <span class="dot" id="conn-dot"></span>
+    <span id="conn-text">CONNECTING…</span>
+    <span class="lat" id="latency">-- ms</span>
+  </div>
+</header>
+
+<section class="sources card">
+  <div class="sources-head">
+    <h2>Source Selector</h2>
+    <div class="token-health">
+      <span>Token TTL <strong id="token-ttl">--</strong></span>
+      <div class="ttl-bar"><div id="ttl-fill"></div></div>
+    </div>
+  </div>
+  <div class="platform-grid" id="platform-grid"></div>
+  <div class="url-row">
+    <code id="feed-url">wss://…</code>
+    <input id="token-input" placeholder="Paste tokenized .aspx URL to go live (optional) — demo stream used otherwise" />
+    <button id="btn-connect">Connect</button>
+    <button id="btn-refresh-token" class="ghost">↻ Refresh Token</button>
+    <button id="btn-drop" class="ghost danger">Simulate Drop</button>
+  </div>
+</section>
+
+<main class="layout">
+  <!-- LIVE -->
+  <section class="card live">
+    <div class="live-top">
+      <div>
+        <div class="label">ROUND <span id="round-id">#48213</span> • <span id="phase" class="phase flying">FLYING</span></div>
+        <div class="multiplier" id="multiplier">1.00x</div>
+        <div class="sub" id="live-sub">212 players • $8,431 staked</div>
+      </div>
+      <div class="momentum-wrap">
+        <div class="label">MOMENTUM</div>
+        <div class="gauge"><div id="gauge-fill"></div><div class="needle" id="gauge-needle"></div></div>
+        <div id="momentum-val">+0.0</div>
+      </div>
+    </div>
+    <canvas id="flight-chart" height="220"></canvas>
+    <div class="history">
+      <div class="label">ROUND RESULTS</div>
+      <div id="history-strip"></div>
+    </div>
+    <div class="stats-grid">
+      <div><span>Avg (50)</span><strong id="st-avg">--</strong></div>
+      <div><span>Max (50)</span><strong id="st-max">--</strong></div>
+      <div><span>&lt; 2x rate</span><strong id="st-low">--</strong></div>
+      <div><span>Since 10x+</span><strong id="st-since">--</strong></div>
+    </div>
+  </section>
+
+  <!-- SIGNAL -->
+  <section class="card signal">
+    <div class="label">AI SIGNAL • ZERO-LATENCY PUSH</div>
+    <div id="signal-action" class="signal-action buy">BUY / ENTER</div>
+    <div class="conf-row">
+      <div class="conf-num"><span id="confidence">72</span><small>%</small></div>
+      <div class="conf-meta">
+        <div>CONFIDENCE SCORE</div>
+        <div class="conf-bar"><div id="conf-fill"></div></div>
+        <div id="signal-reason" class="reason">Mean-reversion: 4-round low streak.</div>
+      </div>
+    </div>
+    <div class="targets">
+      <div class="target"><span>TARGET MULTIPLIER</span><strong id="target-mult">2.40x</strong></div>
+      <div class="target"><span>SUGGESTED STAKE</span><strong id="target-stake">1.0u</strong></div>
+      <div class="target"><span>RISK</span><strong id="target-risk">MEDIUM</strong></div>
+    </div>
+    <div class="signal-meta">
+      <div><span>Latency</span><strong id="sig-latency">12 ms</strong></div>
+      <div><span>Model</span><strong>momentum-v2</strong></div>
+      <div><span>Updated</span><strong id="sig-time">--</strong></div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="sound-toggle" checked /> 🔔 Instant signal alerts + sound</label>
+    <div class="feed-label">LIVE EVENT LOG</div>
+    <div id="event-log"></div>
+  </section>
+</main>
+
+<section class="card how">
+  <h3>How the live connection works</h3>
+  <p>Production mode opens a persistent <code>WebSocket</code> to the platform's tokenized <code>ssgportal.com/*.aspx</code> endpoint (see URL above).
+  This demo runs a <code>SimulatedSocket</code> with identical events (<code>round_start → tick → round_end</code>) and identical signal processing, so you can see zero-latency alerts in action.
+  Paste a live tokened link to switch from simulation to real data. Tokens expire — the engine watches heartbeats + TTL and raises <code>TOKEN EXPIRED / CONNECTION LOST</code> immediately.</p>
+</section>
+
+<div id="toast-wrap"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
